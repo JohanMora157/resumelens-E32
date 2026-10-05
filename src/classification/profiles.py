@@ -1,0 +1,6 @@
+"""Constantes e identificadores para los cuatro perfiles profesionales de ResumeLens."""
+
+FULL_STACK_DEVELOPER = "FULL_STACK_DEVELOPER"
+MACHINE_LEARNING_ENGINEER = "MACHINE_LEARNING_ENGINEER"
+SOFTWARE_ENGINEERING = "SOFTWARE_ENGINEERING"
+AI_DATA = "AI_DATA"
