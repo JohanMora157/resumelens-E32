@@ -13,12 +13,11 @@ EMAIL_PATTERN: re.Pattern = re.compile(
     r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"
 )
 
-# Pattern for phone numbers with optional international code, area code, and delimiters.
+# Pattern for phone numbers with optional label prefix, international code, area code, and delimiters.
 PHONE_PATTERN: re.Pattern = re.compile(
-    r"(?:(?:\b(?:Phone|Tel|Telephone|Mobile|Celular|Cel|Teléfono)\b\s*[:\s]*)?"
-    r"(?:\+?\d{1,3}[\s.-]?)?"
-    r"(?:\(\d{2,4}\)|\b\d{2,4}\b)[\s.-]?"
-    r"\d{3,4}(?:[\s.-]?\d{3,4})?\b)"
+    r"(?:(?:\b(?:Phone|Tel|Telephone|Mobile|Celular|Cel|Teléfono)\b\s*[:\s]+(?:\+?\d{1,3}[\s.-]?)?\d{7,12}\b)|"
+    r"(?:(?:\b(?:Phone|Tel|Telephone|Mobile|Celular|Cel|Teléfono)\b\s*[:\s]*)?(?:\+?\d{1,3}[\s.-]?)?(?:\(\d{2,4}\)|\b\d{2,4}\b)[\s.-]?\d{3,4}(?:[\s.-]?\d{3,4})?\b))",
+    re.IGNORECASE,
 )
 
 # Prefix pattern to strip phone labels.
@@ -71,13 +70,15 @@ EDUCATION_PATTERN: re.Pattern = re.compile(
 SKILLS_SECTION_PATTERN: re.Pattern = re.compile(
     r"(?:^|\n)\s*"
     r"(?:Technical\s+Skills?|Skills?|Technologies|Programming\s+Languages|"
-    r"Frameworks(?:\s+(?:and|&)\s+Libraries)?|Databases?|Tools(?:\s+(?:and|&)\s+Technologies)?|Tech\s+Stack)"
+    r"Frameworks(?:\s+(?:and|&)\s+Libraries)?|Databases?|Tools(?:\s+(?:and|&)\s+Technologies)?|Tech\s+Stack|"
+    r"Habilidades(?:\s+T[eé]cnicas)?|Tecnolog[ií]as|Lenguajes\s+de\s+Programaci[oó]n|Bases\s+de\s+Datos|Herramientas)"
     r"(?:\s*:|\s*(?=\n))"
     r"(?P<content>[\s\S]*?)"
     r"(?=(?:\n\s*(?:Technical\s+Skills?|Skills?|Technologies|Programming\s+Languages|"
     r"Frameworks|Databases?|Tools|Tech\s+Stack|"
-    r"Education|Academic|Experience|Professional\s+Experience|Work\s+Experience|"
-    r"Projects|Certifications?|Contact|Summary|Profile|References|About\s+Me)\s*[:\n]|\n\s*\n\s*\n|\Z))",
+    r"Habilidades|Tecnolog[ií]as|Lenguajes\s+de\s+Programaci[oó]n|Bases\s+de\s+Datos|Herramientas|"
+    r"Education|Educaci[oó]n|Formaci[oó]n|Academic|Experience|Experiencia|Professional\s+Experience|Work\s+Experience|"
+    r"Projects|Proyectos|Certifications?|Certificaciones|Contact|Contacto|Summary|Resumen|Profile|Perfil|References|Referencias|About\s+Me)\s*[:\n]|\n\s*\n\s*\n|\Z))",
     re.IGNORECASE,
 )
 
@@ -94,7 +95,11 @@ def extract_contact_info(text: str) -> Dict[str, Any]:
     Returns:
         Dict[str, Any]: Dictionary containing detected emails and phone numbers.
     """
-    emails: List[str] = EMAIL_PATTERN.findall(text)
+    raw_emails: List[str] = EMAIL_PATTERN.findall(text)
+    emails: List[str] = []
+    for email in raw_emails:
+        if email not in emails:
+            emails.append(email)
 
     raw_phones: List[str] = PHONE_PATTERN.findall(text)
     phones: List[str] = []
@@ -188,7 +193,7 @@ def extract_resume_information(text: str) -> Dict[str, Any]:
     Returns:
         Dict[str, Any]: Structured dictionary with extracted data.
     """
-    if not text:
+    if not text or not text.strip():
         return {
             "contact": {
                 "email": None,

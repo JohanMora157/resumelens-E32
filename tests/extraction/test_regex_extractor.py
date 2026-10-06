@@ -1,17 +1,23 @@
 """Unit tests for the regular expression extraction module (Stage 1).
 
 Verifies extraction of:
-1. Email addresses
-2. Phone numbers
-3. Explicit professional experience mentions
-4. Technical skills section headers
-5. Multiple skills across various delimiters (, ; | \\n)
+1. Email addresses (standard, subdomains, plus-tags, multi-level TLDs)
+2. Phone numbers (international, parenthesis area code, dots, dashes, labeled plain digits)
+3. Explicit professional experience mentions (English and Spanish)
+4. Technical skills section headers (English and Spanish, with or without colons)
+5. Multiple skills across various delimiters (, ; | \\n) and spacing
 6. Academic degrees and fields of study
 7. Full resume with multiple categories simultaneously
 8. Resume with missing categories without errors
 9. Strict preservation of original token casing and representation
 10. Absence of semantic normalization (Regex is not FST)
 11. Assignment reference examples (Wednesday Addams and Mary Jane Watson)
+12. Case insensitivity for section headers, degrees, and experience
+13. Deduplication of repeated values (emails, skills, experience, degrees)
+14. Empty and whitespace-only inputs
+15. Spanish language resumes
+16. Multi-section resumes with interspersed sections
+17. Negative cases where expressions must NOT match (dates, non-emails, general words)
 """
 
 from pathlib import Path
@@ -39,6 +45,20 @@ def test_extract_email_single_and_multiple():
     assert "personal_2026@mail.edu" in result_multiple["contact"]["emails"]
 
 
+def test_extract_email_various_formats():
+    """Test extraction of diverse email formats including subdomains, plus-tags, and multi-level TLDs."""
+    text = """
+    Emails:
+    alex.dev+work@sub.domain.co.uk
+    contact-support@company.io
+    student_123@universidad.edu.co
+    """
+    contact = extract_contact_info(text)
+    assert "alex.dev+work@sub.domain.co.uk" in contact["emails"]
+    assert "contact-support@company.io" in contact["emails"]
+    assert "student_123@universidad.edu.co" in contact["emails"]
+
+
 def test_extract_phone_formats():
     """Test extraction of phone numbers across common formatting conventions."""
     formats = [
@@ -46,6 +66,9 @@ def test_extract_phone_formats():
         ("Tel: (555) 234-5678", "(555) 234-5678"),
         ("Mobile: +57 300 123 4567", "+57 300 123 4567"),
         ("Direct: 555-345-6789", "555-345-6789"),
+        ("Phone: 555.456.7890", "555.456.7890"),
+        ("Celular: 3109876543", "3109876543"),
+        ("Teléfono: +57 (601) 234-5678", "+57 (601) 234-5678"),
     ]
     for text, expected_number in formats:
         contact = extract_contact_info(text)
@@ -106,6 +129,13 @@ def test_extract_multiple_skills_in_same_section():
     - Git
     """
     assert extract_technical_skills(text_bullets) == ["Python", "Django", "PostgreSQL", "Git"]
+
+
+def test_extract_skills_with_irregular_spacing_and_trailing_punctuation():
+    """Test skills separated by mixed delimiters, extra whitespace, and trailing punctuation."""
+    text = "Technical Skills:  JS ,   React.js ;   NodeJS  | Postgres , Git.  "
+    skills = extract_technical_skills(text)
+    assert skills == ["JS", "React.js", "NodeJS", "Postgres", "Git"]
 
 
 def test_extract_academic_education():
@@ -169,6 +199,13 @@ def test_resume_with_missing_categories_does_not_fail():
     assert res_empty["experience"] == []
     assert res_empty["education"] == []
     assert res_empty["technical_skills"] == []
+
+    # Whitespace-only text
+    res_ws = extract_resume_information("   \n\t   \n  ")
+    assert res_ws["contact"]["email"] is None
+    assert res_ws["experience"] == []
+    assert res_ws["education"] == []
+    assert res_ws["technical_skills"] == []
 
     # Descriptive text with no structured categories
     res_desc = extract_resume_information("Just some general text without qualifications or contacts.")
@@ -273,3 +310,130 @@ def test_sample_file_from_data_examples():
     assert "Bachelor's degree" in result["education"]
     assert "Computer Science" in result["education"]
     assert result["technical_skills"] == ["JS", "React.js", "NodeJS", "Postgres", "Git"]
+
+
+def test_case_insensitivity_for_headers_and_patterns():
+    """Test that headers, degrees, and experience match regardless of uppercase or lowercase."""
+    cv = """
+    UPPERCASE CANDIDATE
+    CONTACT: CANDIDATE@CORP.COM | TEL: 555-987-6543
+    3 YEARS OF EXPERIENCE IN DISTRIBUTED SYSTEMS.
+
+    EDUCATION:
+    BACHELOR'S DEGREE IN COMPUTER SCIENCE
+
+    TECHNICAL SKILLS:
+    PYTHON, DOCKER, KUBERNETES
+    """
+    result = extract_resume_information(cv)
+
+    assert result["contact"]["email"] == "CANDIDATE@CORP.COM"
+    assert result["contact"]["phone"] == "555-987-6543"
+    assert "3 YEARS OF EXPERIENCE" in result["experience"]
+    assert any("BACHELOR'S DEGREE" in edu.upper() for edu in result["education"])
+    assert any("COMPUTER SCIENCE" in edu.upper() for edu in result["education"])
+    assert result["technical_skills"] == ["PYTHON", "DOCKER", "KUBERNETES"]
+
+
+def test_deduplication_of_repeated_values():
+    """Test that repeated skills, emails, and experience are cleanly deduplicated."""
+    cv = """
+    Dev Candidate
+    Email: dev@example.com | Alternate: dev@example.com
+    Has 3 years of experience. Repeat: 3 years of experience.
+
+    Programming Languages:
+    Python, SQL, Python
+
+    Databases:
+    PostgreSQL, SQL
+    """
+    result = extract_resume_information(cv)
+
+    # Emails deduplicated
+    assert result["contact"]["emails"] == ["dev@example.com"]
+
+    # Experience deduplicated
+    assert result["experience"] == ["3 years of experience"]
+
+    # Skills deduplicated across sub-sections while preserving first order
+    assert result["technical_skills"] == ["Python", "SQL", "PostgreSQL"]
+
+
+def test_spanish_language_resume():
+    """Test extraction of a Spanish language resume with Spanish headers and degree titles."""
+    cv = """
+    Johan Mora
+    Email: johan.mora@example.com | Teléfono: +57 300 123 4567
+    Profesional con 3 años de experiencia en desarrollo de software.
+
+    Educación:
+    Ingeniería de Sistemas
+
+    Habilidades Técnicas:
+    Python, Django, PostgreSQL, Git.
+    """
+    result = extract_resume_information(cv)
+
+    assert result["contact"]["email"] == "johan.mora@example.com"
+    assert result["contact"]["phone"] == "+57 300 123 4567"
+    assert result["experience"] == ["3 años de experiencia"]
+    assert "Ingeniería de Sistemas" in result["education"]
+    assert result["technical_skills"] == ["Python", "Django", "PostgreSQL", "Git"]
+
+
+def test_resume_with_multiple_interspersed_sections():
+    """Test resume with multiple sections in arbitrary order (summary, projects, certs)."""
+    cv = """
+    Summary:
+    Enthusiastic developer with 5+ years of experience.
+
+    Projects:
+    Built high-scale web platforms.
+
+    Programming Languages:
+    TypeScript, Python
+
+    Certifications:
+    AWS Certified Solutions Architect
+
+    Tools & Technologies:
+    Docker, Git
+    """
+    result = extract_resume_information(cv)
+
+    assert result["experience"] == ["5+ years of experience"]
+    assert result["technical_skills"] == ["TypeScript", "Python", "Docker", "Git"]
+
+
+def test_negative_cases_non_matching_expressions():
+    """Test text that resembles patterns but should deliberately NOT match."""
+    # 1. Non-email text
+    text_invalid_email = "Contact user@ without domain or @missinguser.com or invalid-email."
+    contact = extract_contact_info(text_invalid_email)
+    assert contact["emails"] == []
+    assert contact["email"] is None
+
+    # 2. Date ranges and version numbers should NOT match as phone numbers
+    text_dates = "Worked from 2018 - 2022 on Python 3.11.9. Zip: 90210."
+    contact_dates = extract_contact_info(text_dates)
+    assert contact_dates["phones"] == []
+    assert contact_dates["phone"] is None
+
+    # 3. Non-experience mentions of the word 'experience'
+    text_generic_exp = (
+        "Focuses on user experience and customer experience design. "
+        "Believes that life experience matters."
+    )
+    exp = extract_experience(text_generic_exp)
+    assert exp == []
+
+    # 4. Non-academic mentions of degrees or science
+    text_generic_edu = "Possesses a high degree of enthusiasm in general science."
+    edu = extract_education(text_generic_edu)
+    assert edu == []
+
+    # 5. Generic words outside of technical skill sections are not captured as skills
+    text_general = "I know some programming concepts and use various tools daily."
+    skills = extract_technical_skills(text_general)
+    assert skills == []
