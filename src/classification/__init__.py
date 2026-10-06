@@ -2,16 +2,18 @@
 
 from src.classification.classifier import classify_candidate
 from src.classification.profiles import (
-    AI_DATA,
+    DATA_ANALYST,
     FULL_STACK_DEVELOPER,
     MACHINE_LEARNING_ENGINEER,
-    SOFTWARE_ENGINEERING,
+    PROFILES,
+    QA_ENGINEER,
 )
 
 __all__ = [
-    "AI_DATA",
+    "DATA_ANALYST",
     "FULL_STACK_DEVELOPER",
     "MACHINE_LEARNING_ENGINEER",
-    "SOFTWARE_ENGINEERING",
+    "PROFILES",
+    "QA_ENGINEER",
     "classify_candidate",
 ]
