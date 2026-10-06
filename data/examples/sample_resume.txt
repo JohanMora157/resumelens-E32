@@ -1,0 +1,9 @@
+Wednesday Addams
+wednesday.addams@example.com | +1-555-0199
+3 years of experience developing web applications.
+
+Education:
+Bachelor's degree in Computer Science
+
+Technical Skills:
+JS, React.js, NodeJS, Postgres, Git.
