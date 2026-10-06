@@ -1,0 +1,55 @@
+{
+  "LANGUAGES": {
+    "JAVASCRIPT": ["JS", "Javascript", "Java Script", "ECMAScript"],
+    "TYPESCRIPT": ["TS", "Typescript", "Type Script"],
+    "PYTHON": ["Python", "Python3", "Python 3", "Py"],
+    "JAVA": ["Java"],
+    "R": ["R", "R Language"]
+  },
+  "FRONTEND": {
+    "REACT": ["React", "React.js", "ReactJS", "React JS"],
+    "ANGULAR": ["Angular", "AngularJS", "Angular.js", "Angular JS"],
+    "VUE": ["Vue", "Vue.js", "VueJS", "Vue JS"]
+  },
+  "BACKEND": {
+    "NODE_JS": ["Node", "NodeJS", "Node.js", "Node JS"],
+    "DJANGO": ["Django"],
+    "SPRING_BOOT": ["Spring Boot", "SpringBoot", "Spring-Boot", "Spring"]
+  },
+  "DATABASES": {
+    "POSTGRESQL": ["Postgres", "PostgreSQL", "Postgre SQL"],
+    "MYSQL": ["MySQL", "My SQL"],
+    "MONGODB": ["MongoDB", "Mongo", "Mongo DB"],
+    "SQL": ["SQL"]
+  },
+  "API": {
+    "REST_API": ["REST", "REST API", "REST APIs", "RESTful", "RESTful API", "RESTful APIs"]
+  },
+  "DATA_SCIENCE": {
+    "PANDAS": ["Pandas"],
+    "NUMPY": ["NumPy", "Num Py"],
+    "SCIKIT_LEARN": ["sklearn", "scikit learn", "Scikit-learn", "scikit_learn"],
+    "TENSORFLOW": ["TensorFlow", "Tensor Flow", "TF"],
+    "PYTORCH": ["PyTorch", "Py Torch", "Torch"],
+    "MATPLOTLIB": ["Matplotlib", "Mat Plot Lib", "mpl"]
+  },
+  "ANALYTICS_TOOLS": {
+    "EXCEL": ["Excel", "MS Excel", "Microsoft Excel"],
+    "POWER_BI": ["Power BI", "PowerBI", "Power-BI"],
+    "TABLEAU": ["Tableau"]
+  },
+  "QA_TOOLS": {
+    "PYTEST": ["pytest", "Py Test"],
+    "JUNIT": ["JUnit", "JUnit5", "JUnit 5", "J Unit"],
+    "TESTNG": ["TestNG", "Test NG"],
+    "SELENIUM": ["Selenium", "Selenium WebDriver"],
+    "CYPRESS": ["Cypress", "Cypress.io"],
+    "PLAYWRIGHT": ["Playwright", "Play Wright"],
+    "POSTMAN": ["Postman"],
+    "REST_ASSURED": ["Rest Assured", "RestAssured", "REST-assured"],
+    "JIRA": ["Jira", "Atlassian Jira"]
+  },
+  "VERSION_CONTROL": {
+    "GIT": ["Git", "GitHub", "Git Hub"]
+  }
+}
