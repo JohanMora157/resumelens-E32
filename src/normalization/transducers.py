@@ -10,6 +10,8 @@ data/aliases.json. Cada alias es un camino independiente de estados:
 - La última letra emite el token canónico.
 - Mayúsculas/minúsculas se resuelven DENTRO del FST (dos transiciones por letra),
   por eso aliases.json solo guarda variantes realmente distintas.
+- Cada token canónico también es un alias de sí mismo (NODE_JS -> NODE_JS), para que
+  normalizar sea idempotente.
 
 Los caminos NO comparten prefijos: con un trie, "Node" y "NodeJS" emitirían
 NODE_JS dos veces. Con caminos separados el FST es no determinista, pero una
@@ -33,7 +35,7 @@ def build_fst(aliases: Dict[str, List[str]]) -> FST:
     seen: Dict[str, str] = {}  # alias en minúscula -> canónico (detecta conflictos)
     n = 0
     for canonical, variants in aliases.items():
-        for alias in variants:
+        for alias in [canonical, *variants]:  # el canónico se reconoce a sí mismo
             key = alias.lower()
             if key in seen:
                 if seen[key] != canonical:
