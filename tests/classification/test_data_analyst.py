@@ -191,3 +191,33 @@ def test_dfa_formal_properties():
     minimized_dfa = dfa.minimize()
     assert len(minimized_dfa.states) == 16
 
+
+def test_explicit_requirements_checklist():
+    """Verify all explicit checklist scenarios requested for the assignment closure."""
+    # 1. Valid mandatory case: SQL + PYTHON + PANDAS + POWER_BI -> True
+    assert classify_data_analyst(["SQL", "PYTHON", "PANDAS", "POWER_BI"]) is True
+
+    # 2. Invalid missing category: SQL + PYTHON + PANDAS -> False (missing VISUALIZATION)
+    assert classify_data_analyst(["SQL", "PYTHON", "PANDAS"]) is False
+
+    # 3. Valid alternative skills: POSTGRESQL + R + NUMPY + TABLEAU -> True
+    assert classify_data_analyst(["POSTGRESQL", "R", "NUMPY", "TABLEAU"]) is True
+
+    # 4. Same skills in different order -> same True result
+    assert classify_data_analyst(["TABLEAU", "NUMPY", "R", "POSTGRESQL"]) is True
+
+    # 5. EXCEL before, between, and after mandatory skills
+    assert classify_data_analyst(["EXCEL", "POSTGRESQL", "R", "NUMPY", "TABLEAU"]) is True
+    assert classify_data_analyst(["POSTGRESQL", "R", "EXCEL", "NUMPY", "TABLEAU"]) is True
+    assert classify_data_analyst(["POSTGRESQL", "R", "NUMPY", "TABLEAU", "EXCEL"]) is True
+
+    # 6. Foreign skill causes rejection
+    assert classify_data_analyst(["POSTGRESQL", "R", "NUMPY", "TABLEAU", "JAVA"]) is False
+
+    # 7. Empty input
+    assert classify_data_analyst([]) is False
+
+    # 8. Repeated skills
+    assert classify_data_analyst(["SQL", "SQL", "PYTHON", "PANDAS", "POWER_BI"]) is True
+
+
