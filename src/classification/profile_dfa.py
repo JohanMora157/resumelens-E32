@@ -16,14 +16,21 @@ cualquier permutación de skills válidas se acepta.
 """
 
 import itertools
-from typing import Dict, Iterable, Sequence
+from typing import Callable, Dict, Iterable, Optional, Sequence
 
 from pyformlang.finite_automaton import DeterministicFiniteAutomaton, State, Symbol
 
 
-def _name(subset: frozenset, mandatory: Sequence[str]) -> str:
+def _name(subset: frozenset, mandatory: Sequence[str], profile: Optional[Dict] = None) -> str:
     if not subset:
         return "q_empty"
+    if profile:
+        aliases = profile.get("state_aliases") or profile.get("category_aliases")
+        if aliases:
+            if subset == frozenset(mandatory):
+                return profile.get("final_state_name", "q_all_mandatory")
+            parts = [aliases[c] for c in mandatory if c in subset]
+            return "q_" + "_".join(parts)
     if subset == frozenset(mandatory):
         return "q_all"
     return "q_" + "+".join(c for c in mandatory if c in subset)
@@ -34,7 +41,11 @@ def mandatory_categories(profile: Dict, optional: Iterable[str] = ()) -> list:
     return [c for c in profile["canonical_order"] if c not in optional]
 
 
-def build_profile_dfa(profile: Dict, optional: Iterable[str] = ()) -> DeterministicFiniteAutomaton:
+def build_profile_dfa(
+    profile: Dict,
+    optional: Iterable[str] = (),
+    state_namer: Optional[Callable[[frozenset, Sequence[str]], str]] = None,
+) -> DeterministicFiniteAutomaton:
     """Construye el DFA de un perfil. `optional` = categorías que no son obligatorias."""
     optional = set(optional)
     unknown = optional - set(profile["categories"])
@@ -44,9 +55,11 @@ def build_profile_dfa(profile: Dict, optional: Iterable[str] = ()) -> Determinis
     categories = profile["categories"]
     mandatory = mandatory_categories(profile, optional)
 
+    namer = state_namer or profile.get("state_namer") or (lambda s, m: _name(s, m, profile))
+
     subsets = [frozenset(c) for r in range(len(mandatory) + 1)
                for c in itertools.combinations(mandatory, r)]
-    states = {s: State(_name(s, mandatory)) for s in subsets}
+    states = {s: State(namer(s, mandatory)) for s in subsets}
 
     dfa = DeterministicFiniteAutomaton()
     dfa.add_start_state(states[frozenset()])
