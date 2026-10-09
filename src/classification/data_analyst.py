@@ -29,10 +29,10 @@ is accepted.
 """
 
 from typing import Iterable, List
-import itertools
 
-from pyformlang.finite_automaton import DeterministicFiniteAutomaton, State, Symbol
+from pyformlang.finite_automaton import DeterministicFiniteAutomaton
 
+from src.classification.profile_dfa import accepts, build_profile_dfa
 from src.classification.profiles import DATA_ANALYST
 
 MANDATORY_CATEGORIES = (
@@ -53,6 +53,7 @@ _CATEGORY_ALIASES = {
 
 
 def _subset_to_state_name(subset: frozenset) -> str:
+    """Helper preserved for backward compatibility."""
     if not subset:
         return "q_empty"
     if subset == frozenset(MANDATORY_CATEGORIES):
@@ -74,44 +75,12 @@ def build_data_analyst_dfa() -> DeterministicFiniteAutomaton:
     - q0: q_empty
     - F: {q_all_mandatory}
     """
-    dfa = DeterministicFiniteAutomaton()
-
-    categories = DATA_ANALYST["categories"]
-
-    # 1. Generate all 16 states from powerset of mandatory categories
-    subsets = []
-    for r in range(len(MANDATORY_CATEGORIES) + 1):
-        for combo in itertools.combinations(MANDATORY_CATEGORIES, r):
-            subsets.append(frozenset(combo))
-
-    state_map = {s: State(_subset_to_state_name(s)) for s in subsets}
-
-    # 2. Configure start and final states
-    q0 = state_map[frozenset()]
-    q_final = state_map[frozenset(MANDATORY_CATEGORIES)]
-    dfa.add_start_state(q0)
-    dfa.add_final_state(q_final)
-
-    # 3. Add transitions for all states and category tokens
-    for s, state_obj in state_map.items():
-        # Mandatory categories: advance to union state
-        for cat in MANDATORY_CATEGORIES:
-            next_s = s | {cat}
-            next_state_obj = state_map[next_s]
-            for token in categories[cat]:
-                dfa.add_transition(state_obj, Symbol(token), next_state_obj)
-
-        # Optional categories (SPREADSHEET): self-loop preserving state
-        for cat in OPTIONAL_CATEGORIES:
-            next_state_obj = state_obj
-            for token in categories[cat]:
-                dfa.add_transition(state_obj, Symbol(token), next_state_obj)
-
-    return dfa
+    return build_profile_dfa(DATA_ANALYST, optional=OPTIONAL_CATEGORIES)
 
 
 # Cached instance for efficient reuse
 _DATA_ANALYST_DFA: DeterministicFiniteAutomaton = build_data_analyst_dfa()
+_DFA: DeterministicFiniteAutomaton = _DATA_ANALYST_DFA
 
 
 def classify_data_analyst(skills: Iterable[str]) -> bool:
@@ -131,9 +100,5 @@ def classify_data_analyst(skills: Iterable[str]) -> bool:
     Returns:
         bool: True if accepted by the Data Analyst DFA, False otherwise.
     """
-    skill_list = list(skills)
-    if not skill_list:
-        return False
-    symbols = [Symbol(s) for s in skill_list]
-    return _DATA_ANALYST_DFA.accepts(symbols)
+    return accepts(_DATA_ANALYST_DFA, skills)
 

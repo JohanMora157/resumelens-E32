@@ -66,6 +66,13 @@ DATA_ANALYST = {
         "DATA_PROCESSING": ["PANDAS", "NUMPY"],
         "VISUALIZATION": ["POWER_BI", "TABLEAU", "MATPLOTLIB"],
     },
+    "state_aliases": {
+        "QUERY_LANGUAGE": "query",
+        "ANALYSIS_LANGUAGE": "analysis",
+        "DATA_PROCESSING": "processing",
+        "VISUALIZATION": "visualization",
+    },
+    "final_state_name": "q_all_mandatory",
 }
 
 PROFILES = {
