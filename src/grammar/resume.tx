@@ -1,0 +1,77 @@
+/*
+ * ResumeLens - Candidate Profile Language (CPL)
+ * Gramática libre de contexto implementada en textX (Etapa 4).
+ *
+ * Ejemplo de programa válido:
+ *
+ *   candidate "Wednesday Addams" {
+ *     contact { email: wednesday@example.com  phone: +1-555-0199 }
+ *     experience { years: 3  description: "web applications" }
+ *     education { "Bachelor's degree", "Computer Science" }
+ *     skills { JAVASCRIPT, REACT, NODE_JS, POSTGRESQL, GIT }
+ *     classification {
+ *       FULL_STACK_DEVELOPER: ACCEPTED
+ *       MACHINE_LEARNING_ENGINEER: REJECTED
+ *       QA_ENGINEER: REJECTED
+ *       DATA_ANALYST: REJECTED
+ *     }
+ *   }
+ *
+ * NO TERMINALES (reglas de estructura): Candidate, Contact, Experience, Education,
+ *   Skills, Classification, ProfileResult.
+ * TERMINALES léxicos (reglas de coincidencia): STRING, INT, Email, Phone, SkillName,
+ *   ProfileName, Status y las palabras clave entre comillas simples.
+ *
+ * Elementos repetidos: experience (0..n), education (0..n), skills (0..n, separados por
+ * coma), classification (0..n resultados).
+ * Anidamiento: Candidate contiene bloques que a su vez contienen entradas.
+ */
+
+Candidate:
+    'candidate' name=STRING '{'
+        contact=Contact
+        experiences*=Experience
+        education=Education
+        skills=Skills
+        classification=Classification
+    '}'
+;
+
+Contact:
+    'contact' '{'
+        ('email' ':' email=Email)?
+        ('phone' ':' phone=Phone)?
+    '}'
+;
+
+Experience:
+    'experience' '{'
+        'years' ':' years=INT
+        ('description' ':' description=STRING)?
+    '}'
+;
+
+Education:
+    'education' '{' (entries+=STRING[','])? '}'
+;
+
+Skills:
+    'skills' '{' (names+=SkillName[','])? '}'
+;
+
+Classification:
+    'classification' '{' results*=ProfileResult '}'
+;
+
+ProfileResult:
+    profile=ProfileName ':' status=Status
+;
+
+// ---- Reglas léxicas (terminales) ----
+Email:       /[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}/;
+Phone:       /[+(]?[0-9][0-9 ().\-]{5,24}[0-9]/;
+SkillName:   /[A-Z][A-Z0-9_]*/;
+ProfileName: 'FULL_STACK_DEVELOPER' | 'MACHINE_LEARNING_ENGINEER' | 'QA_ENGINEER' | 'DATA_ANALYST';
+Status:      'ACCEPTED' | 'REJECTED';
+
+Comment: /\/\/.*$/ | /\/\*(.|\n)*?\*\//;

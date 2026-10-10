@@ -196,18 +196,20 @@ def test_unique_classification_profiles_pass():
     _check_classification(SimpleNamespace(results=[]))
 
 
-def test_missing_grammar_raises_configuration_error():
+def test_missing_grammar_raises_configuration_error(tmp_path: Path):
     """12. Calling validate_dsl when resume.tx is absent raises DSLValidationError with kind='configuration'."""
+    missing_grammar = tmp_path / "non_existent_resume.tx"
     with pytest.raises(DSLValidationError) as exc:
-        validate_dsl('candidate "Ada Lovelace" { }')
+        validate_dsl('candidate "Ada Lovelace" { }', grammar_path=missing_grammar)
     assert exc.value.kind == "configuration"
     assert "El archivo de gramática no existe" in str(exc.value)
 
 
-def test_is_valid_dsl_propagates_missing_grammar_configuration_error():
+def test_is_valid_dsl_propagates_missing_grammar_configuration_error(tmp_path: Path):
     """13. is_valid_dsl() does not silently return False when the grammar is absent."""
+    missing_grammar = tmp_path / "non_existent_resume.tx"
     with pytest.raises(DSLValidationError) as exc:
-        is_valid_dsl('candidate "Ada Lovelace" { }')
+        is_valid_dsl('candidate "Ada Lovelace" { }', grammar_path=missing_grammar)
     assert exc.value.kind == "configuration"
 
 
@@ -221,13 +223,17 @@ def test_parse_candidate_profile_type_error():
         parse_candidate_profile(["not", "a", "dict"])
 
 
-def test_parse_candidate_profile_propagates_config_error():
+def test_parse_candidate_profile_propagates_config_error(tmp_path: Path):
     """15. parse_candidate_profile propagates configuration error when grammar is missing."""
+    missing_grammar = tmp_path / "non_existent_resume.tx"
     with pytest.raises(DSLValidationError) as exc:
-        parse_candidate_profile({
-            "name": "Alan Turing",
-            "skills": ["PYTHON", "SQL"],
-        })
+        parse_candidate_profile(
+            {
+                "name": "Alan Turing",
+                "skills": ["PYTHON", "SQL"],
+            },
+            grammar_path=missing_grammar,
+        )
     assert exc.value.kind == "configuration"
 
 
