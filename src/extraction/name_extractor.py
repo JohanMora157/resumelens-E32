@@ -23,10 +23,11 @@ def _looks_like_name(line: str) -> bool:
     return all(w[0].isupper() or w.lower() in _PARTICLES for w in words)
 
 
-def extract_name(text: str, max_lines: int = 3) -> Optional[str]:
+def extract_name(text: str, max_lines: int = 10) -> Optional[str]:
     """Devuelve el nombre del candidato o None."""
     lines = [ln.strip() for ln in (text or "").splitlines() if ln.strip()]
     for line in lines[:max_lines]:
-        if NAME_PATTERN.fullmatch(line) and _looks_like_name(line) and not (set(re.split(r"[ '\-.]", line.lower())) & _HEADERS):
-            return line
+        clean = re.sub(r"^[#*•\-\s]+", "", line).strip()
+        if NAME_PATTERN.fullmatch(clean) and _looks_like_name(clean) and not (set(re.split(r"[ '\-.]", clean.lower())) & _HEADERS):
+            return clean
     return None
