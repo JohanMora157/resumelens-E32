@@ -1,0 +1,26 @@
+digraph G {
+  rankdir=LR; nodesep=0.5; ranksep=1.3;
+  node [shape=circle, style=filled, fillcolor="#f1f5f9", color="#64748b", fontsize=12];
+  edge [fontsize=11, penwidth=1.6];
+  start [shape=point, width=0.1]; start -> s000;
+  s000 [label="∅"];
+  s100 [label="{L}"];
+  s010 [label="{D}"];
+  s001 [label="{V}"];
+  s110 [label="{L,D}"];
+  s101 [label="{L,V}"];
+  s011 [label="{D,V}"];
+  s111 [label="{L,D,V}", shape=doublecircle, fillcolor="#bbf7d0", color="#166534"];
+  s000 -> s100 [label="L", color="#2563eb", fontcolor="#2563eb"];
+  s000 -> s010 [label="D", color="#dc2626", fontcolor="#dc2626"];
+  s000 -> s001 [label="V", color="#16a34a", fontcolor="#16a34a"];
+  s100 -> s110 [label="D", color="#dc2626", fontcolor="#dc2626"];
+  s100 -> s101 [label="V", color="#16a34a", fontcolor="#16a34a"];
+  s010 -> s110 [label="L", color="#2563eb", fontcolor="#2563eb"];
+  s010 -> s011 [label="V", color="#16a34a", fontcolor="#16a34a"];
+  s001 -> s101 [label="L", color="#2563eb", fontcolor="#2563eb"];
+  s001 -> s011 [label="D", color="#dc2626", fontcolor="#dc2626"];
+  s110 -> s111 [label="V", color="#16a34a", fontcolor="#16a34a"];
+  s101 -> s111 [label="D", color="#dc2626", fontcolor="#dc2626"];
+  s011 -> s111 [label="L", color="#2563eb", fontcolor="#2563eb"];
+  labelloc=t; fontsize=14; label="Ejemplo con 3 categorias: L=LANGUAGE, D=DATABASE, V=VERSION_CONTROL\nCada estado = categorias ya cubiertas. Los DFA reales tienen 2^k estados (k = categorias obligatorias)."; }

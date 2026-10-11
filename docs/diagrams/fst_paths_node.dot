@@ -1,0 +1,12 @@
+digraph G {
+  rankdir=LR; node [shape=circle, fontsize=11]; edge [fontsize=11];
+  start [shape=point]; start -> q0;
+  q0 [label="q0"];
+  // camino 1: Node
+  a1 [label="a1"]; a2 [label="a2"]; a3 [label="a3"]; a4 [label="a4", shape=doublecircle];
+  q0 -> a1 [label="N/ε"]; a1 -> a2 [label="o/ε"]; a2 -> a3 [label="d/ε"]; a3 -> a4 [label="e/NODE_JS"];
+  // camino 2: NodeJS (rama independiente desde q0)
+  b1 [label="b1"]; b2 [label="b2"]; b3 [label="b3"]; b4 [label="b4"]; b5 [label="b5"]; b6 [label="b6", shape=doublecircle];
+  q0 -> b1 [label="N/ε"]; b1 -> b2 [label="o/ε"]; b2 -> b3 [label="d/ε"]; b3 -> b4 [label="e/ε"]; b4 -> b5 [label="J/ε"]; b5 -> b6 [label="S/NODE_JS"];
+  labelloc=t; label="Dos caminos independientes: \"Node\" y \"NodeJS\" emiten NODE_JS una sola vez\n(se muestra una sola variante de caja por letra; el FST real agrega la otra)";
+}

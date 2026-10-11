@@ -1,0 +1,66 @@
+digraph G {
+  rankdir=LR; splines=true; nodesep=0.25; ranksep=1.1;
+  node [shape=circle, width=0.35, fixedsize=true, label="", style=filled, fillcolor="#f1f5f9", color="#64748b"];
+  edge [arrowsize=0.6, penwidth=1.2];
+  start [shape=point, width=0.1]; start -> s0000;
+  s0000 [fillcolor="#e2e8f0"];
+  { rank=same; s0000; }
+  s1000;
+  s0100;
+  s0010;
+  s0001;
+  { rank=same; s1000; s0100; s0010; s0001; }
+  s1100;
+  s1010;
+  s1001;
+  s0110;
+  s0101;
+  s0011;
+  { rank=same; s1100; s1010; s1001; s0110; s0101; s0011; }
+  s1110;
+  s1101;
+  s1011;
+  s0111;
+  { rank=same; s1110; s1101; s1011; s0111; }
+  s1111 [shape=doublecircle, fillcolor="#bbf7d0", color="#166534"];
+  { rank=same; s1111; }
+  s0000 -> s1000 [color="#2563eb"];
+  s0000 -> s0100 [color="#dc2626"];
+  s0000 -> s0010 [color="#16a34a"];
+  s0000 -> s0001 [color="#d97706"];
+  s1000 -> s1100 [color="#dc2626"];
+  s1000 -> s1010 [color="#16a34a"];
+  s1000 -> s1001 [color="#d97706"];
+  s0100 -> s1100 [color="#2563eb"];
+  s0100 -> s0110 [color="#16a34a"];
+  s0100 -> s0101 [color="#d97706"];
+  s0010 -> s1010 [color="#2563eb"];
+  s0010 -> s0110 [color="#dc2626"];
+  s0010 -> s0011 [color="#d97706"];
+  s0001 -> s1001 [color="#2563eb"];
+  s0001 -> s0101 [color="#dc2626"];
+  s0001 -> s0011 [color="#16a34a"];
+  s1100 -> s1110 [color="#16a34a"];
+  s1100 -> s1101 [color="#d97706"];
+  s1010 -> s1110 [color="#dc2626"];
+  s1010 -> s1011 [color="#d97706"];
+  s1001 -> s1101 [color="#dc2626"];
+  s1001 -> s1011 [color="#16a34a"];
+  s0110 -> s1110 [color="#2563eb"];
+  s0110 -> s0111 [color="#d97706"];
+  s0101 -> s1101 [color="#2563eb"];
+  s0101 -> s0111 [color="#16a34a"];
+  s0011 -> s1011 [color="#2563eb"];
+  s0011 -> s0111 [color="#dc2626"];
+  s1110 -> s1111 [color="#d97706"];
+  s1101 -> s1111 [color="#16a34a"];
+  s1011 -> s1111 [color="#dc2626"];
+  s0111 -> s1111 [color="#2563eb"];
+  subgraph cluster_leg { label="Categorias (color de la flecha)"; fontsize=12; color="#cbd5e1";
+    leg0 [shape=box, style=filled, fillcolor="#2563eb", fontcolor=white, width=1.9, height=0.25, fixedsize=true, fontsize=10, label="QUERY_LANGUAGE"];
+    leg1 [shape=box, style=filled, fillcolor="#dc2626", fontcolor=white, width=1.9, height=0.25, fixedsize=true, fontsize=10, label="ANALYSIS_LANGUAGE"];
+    leg2 [shape=box, style=filled, fillcolor="#16a34a", fontcolor=white, width=1.9, height=0.25, fixedsize=true, fontsize=10, label="DATA_PROCESSING"];
+    leg3 [shape=box, style=filled, fillcolor="#d97706", fontcolor=white, width=1.9, height=0.25, fixedsize=true, fontsize=10, label="VISUALIZATION"];
+  }
+  labelloc=t; fontsize=14; label="DATA_ANALYST: 16 estados (subconjuntos de 4 categorias obligatorias)\nDoble circulo = aceptacion (todas cubiertas). Categorias opcionales: SPREADSHEET (self-loop).";
+}

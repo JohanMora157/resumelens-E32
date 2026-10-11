@@ -358,6 +358,22 @@ A continuación se detalla la formalización de cada uno de los 9 transductores 
 
 ---
 
+### 4.10 Diagramas
+
+**Transductor completo de `VERSION_CONTROL`** (17 estados). Cada alias es una rama independiente
+desde `q0`, con dos transiciones por letra (mayúscula y minúscula). La última letra emite `GIT`.
+
+![FST VERSION_CONTROL](diagrams/fst_version_control.png)
+
+**Caminos independientes** para `Node` y `NodeJS` (familia `BACKEND`). Al no compartir prefijo, cada
+palabra emite `NODE_JS` exactamente una vez.
+
+![Caminos independientes Node / NodeJS](diagrams/fst_paths_node.png)
+
+Los `.dot` de las 9 familias están en `docs/diagrams/`.
+
+---
+
 ## 5. Tabla Resumen Comparativa de los 9 FSTs
 
 A continuación se consolidan los componentes cuantitativos y cualitativos exactos de los 9 transductores que integran el sistema:
