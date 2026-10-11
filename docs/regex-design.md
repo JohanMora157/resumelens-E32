@@ -17,8 +17,9 @@ Raw Resume Text ──[ Regular Expressions ]──> Extracted Resume Tokens
 
 ## 2. Information Extracted
 
-The extractor categorizes detected information into four distinct fields:
+The extractor categorizes detected information into five distinct fields:
 
+0. **Candidate Name**: The candidate's full name, found in the first lines of the résumé (see section 3.6).
 1. **Contact Information**: Email addresses and phone numbers.
 2. **Professional Experience**: Explicit quantitative experience statements (e.g., years of experience).
 3. **Education**: Recognized academic degrees and computer science/software engineering fields of study.
@@ -78,6 +79,7 @@ The extractor categorizes detected information into four distinct fields:
 - **What it recognizes**: Degrees and computing disciplines in their original text.
 - **Input example**: `Bachelor's degree in Computer Science`
 - **Extracted output**: `["Bachelor's degree", "Computer Science"]`
+- **Known limitation**: only the degrees and disciplines in the pattern lists are recognized. For example, `Ingeniería de Sistemas` is extracted, but `Systems Engineering` is not, so `Bachelor's degree in Systems Engineering` yields only `"Bachelor's degree"`.
 
 ### 3.5 Skills Section and Delimiter Patterns
 
@@ -91,6 +93,18 @@ The extractor categorizes detected information into four distinct fields:
   r"[,;|\n]+"
   ```
   Splits items listed within the captured content using commas, semicolons, vertical bars, or line breaks/bullets, while cleanly stripping sentence-ending punctuation (like a trailing period in `Git.`) and preserving token extensions (like `.js` in `React.js` or `.net` in `ASP.NET`).
+
+### 3.6 Candidate Name Pattern (`NAME_PATTERN`)
+
+- **Regular Expression** (`src/extraction/name_extractor.py`):
+  ```python
+  r"^[^\W\d_]+(?:[ '\-.][^\W\d_]+){1,4}$"
+  ```
+- **What it recognizes**: a line of 2 to 5 words made only of letters (including accents), apostrophes, hyphens or periods. Each word must start with an uppercase letter, except name particles such as `de`, `del`, `van` or `von`. Only the first three non-empty lines of the résumé are examined.
+- **What it excludes**: lines with digits or `@`, section headers (`Technical Skills`, `Education`, `Experiencia`, ...) and lowercase phrases such as `developing web applications`.
+- **Input example**: `Wednesday Addams`
+- **Extracted output**: `"Wednesday Addams"`
+- **Why it is needed**: the name is a mandatory element of the candidate-profile grammar (Stage 4). If no name is found, the pipeline uses `Unknown Candidate`.
 
 ---
 

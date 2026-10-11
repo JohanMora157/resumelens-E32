@@ -1,6 +1,6 @@
 # Data Analyst Automaton Design
 
-This document specifies the formal design and implementation of the **Data Analyst** profile classification automaton in ResumeLens.
+This document specifies the formal design and implementation of the **Data Analyst** profile classification automaton in ResumeLens. A shorter summary in Spanish is available in [`data-analyst-dfa.md`](data-analyst-dfa.md); the general formalization of all four automata is in [`dfa-design.md`](dfa-design.md).
 
 ---
 
@@ -250,18 +250,20 @@ stateDiagram-v2
 | `["SQL", "PYTHON", "PANDAS", "POWER_BI", "GIT"]` | Foreign token `GIT` $\notin \Sigma$; causes DFA rejection. |
 | `["REACT"]` | Foreign token $\notin \Sigma$. |
 
+> **Nota sobre símbolos ajenos.** El rechazo por símbolo fuera de $\Sigma$ ocurre cuando el autómata se usa directamente. En el pipeline completo, `sort_for_profile` descarta antes los tokens que no pertenecen al perfil, por lo que una skill ajena (por ejemplo `GIT`) no provoca el rechazo del candidato.
+
 ---
 
 ## 7. Implementation Architecture
 
 The DFA is implemented in:
-- File: [`src/classification/data_analyst.py`](file:///c:/Users/ASUS/Desktop/Integradora%20discretas%20iii/resumelens-E32/src/classification/data_analyst.py)
+- File: [`src/classification/data_analyst.py`](../src/classification/data_analyst.py)
 - Primary functions:
   - `build_data_analyst_dfa() -> DeterministicFiniteAutomaton`: Builds and returns the 16-state pyformlang DFA.
   - `classify_data_analyst(skills: Iterable[str]) -> bool`: Evaluates an input sequence using a cached instance of the DFA.
 
 ### Formal Verification Assertions (Unit Tests)
-In [`tests/classification/test_data_analyst.py`](file:///c:/Users/ASUS/Desktop/Integradora%20discretas%20iii/resumelens-E32/tests/classification/test_data_analyst.py):
+In [`tests/classification/test_data_analyst.py`](../tests/classification/test_data_analyst.py):
 1. **Determinism**: `dfa.is_deterministic() == True`.
 2. **State Count**: Exactly 16 states (`len(dfa.states) == 16`).
 3. **Minimality**: `len(dfa.minimize().states) == 16` confirms that the DFA cannot be reduced further.

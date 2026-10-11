@@ -6,13 +6,27 @@
 > architecture, responsibilities, testing conventions, documentation
 > expectations, and Git safety rules.
 
+> **Estado final del proyecto (nota añadida al entregar).** Esta guía se escribió al inicio como plan de
+> trabajo y se conserva por referencia. Donde difiera de lo siguiente, **prevalece lo siguiente**:
+>
+> - Los dos perfiles adicionales son **QA Engineer** (ingeniería de software) y **Data Analyst** (IA/datos).
+>   Los cuatro perfiles están en [`profile-definitions.md`](profile-definitions.md).
+> - El paquete `src/models/` se eliminó: las etapas se comunican con estructuras simples y con `PipelineResult`
+>   (`src/pipeline.py`).
+> - Los autómatas están en `src/classification/` (`full_stack_developer.py`, `machine_learning_engineer.py`,
+>   `qa_engineer.py`, `data_analyst.py`) sobre la construcción común de `profile_dfa.py`.
+> - La documentación final está en `dfa-design.md`, `data-analyst.md`, `fst-design.md`, `regex-design.md`,
+>   `grammar-design.md`, `test-design.md`, `architecture.md` y `ai-usage.md`.
+> - El reparto de perfiles por persona de las secciones 12 y 13 fue el plan inicial; la contribución real de cada
+>   integrante está en el historial de commits.
+
 ------------------------------------------------------------------------
 
 ## 1. Project identity
 
 **Project:** ResumeLens --- Formal Language-Based Resume Screening\
 **Course:** Computación y Estructuras Discretas III --- 2026-2\
-**Team members:** - Juan David Fajardo - Johan David Mora - Jhosua Sayur
+**Team members:** Juan David Fajardo, Johan Mora, Joshua Sayur
 
 ResumeLens is an application that receives textual résumés and
 determines whether the qualifications explicitly identified in a

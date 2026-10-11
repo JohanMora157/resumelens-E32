@@ -1,6 +1,6 @@
 # Autómata Finito Determinista (DFA) — Data Analyst
 
-Documento de formalización del autómata correspondiente al perfil **Data Analyst** en ResumeLens (Etapa 3 del pipeline).
+Documento de formalización del autómata correspondiente al perfil **Data Analyst** en ResumeLens (Etapa 3 del pipeline). Para la tabla de transiciones completa y el diagrama, ver [`data-analyst.md`](data-analyst.md); para los cuatro autómatas en conjunto, ver [`dfa-design.md`](dfa-design.md).
 
 ---
 
@@ -96,7 +96,9 @@ En un currículum vitae, un candidato puede listar sus habilidades en cualquier 
 `EXCEL` forma parte válida del alfabeto $\Sigma$, pero no es requisito para la aceptación. Al funcionar como auto-bucle en cada estado, puede aparecer al inicio, en medio, al final, repetirse o estar ausente sin impedir la aceptación.
 
 ### 4.3 Símbolos fuera del Alfabeto
-Si la lista contiene tecnologías ajenas al perfil (por ejemplo `GIT` o `REACT`), el DFA no posee transición para dicho símbolo, lo que garantiza el rechazo formal sin necesidad de filtros ad-hoc.
+Si la lista contiene tecnologías ajenas al perfil (por ejemplo `GIT` o `REACT`), el DFA no posee transición para dicho símbolo, lo que garantiza el rechazo formal cuando el autómata se usa directamente.
+
+> **Nota:** en el pipeline completo, `sort_for_profile` descarta antes los tokens que no pertenecen al perfil, por lo que una skill ajena (por ejemplo `GIT`) no provoca el rechazo del candidato.
 
 ---
 

@@ -378,7 +378,7 @@ Los `.dot` de las 9 familias están en `docs/diagrams/`.
 
 A continuación se consolidan los componentes cuantitativos y cualitativos exactos de los 9 transductores que integran el sistema:
 
-| Familia Tecnológica | Nº Estados ($|Q|$) | Símbolos de Entrada ($|\Sigma|$) | Símbolos de Salida ($|\Gamma|$) | Nº Transiciones | Estados Finales ($|F|$) | Habilidades Canónicas Producidas |
+| Familia Tecnológica | Nº Estados ($\lvert Q \rvert$) | Símbolos de Entrada ($\lvert \Sigma \rvert$) | Tokens de Salida (sin $\varepsilon$) | Nº Transiciones | Estados Finales ($\lvert F \rvert$) | Habilidades Canónicas Producidas |
 | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
 | **`LANGUAGES`** | 95 | 38 | 5 | 182 | 14 | `JAVA`, `JAVASCRIPT`, `PYTHON`, `R`, `TYPESCRIPT` |
 | **`FRONTEND`** | 85 | 26 | 3 | 162 | 12 | `ANGULAR`, `REACT`, `VUE` |
@@ -389,7 +389,7 @@ A continuación se consolidan los componentes cuantitativos y cualitativos exact
 | **`ANALYTICS_TOOLS`** | 67 | 35 | 3 | 127 | 8 | `EXCEL`, `POWER_BI`, `TABLEAU` |
 | **`QA_TOOLS`** | 187 | 47 | 9 | 359 | 21 | `CYPRESS`, `JIRA`, `JUNIT`, `PLAYWRIGHT`, `POSTMAN`, `PYTEST`, `REST_ASSURED`, `SELENIUM`, `TESTNG` |
 | **`VERSION_CONTROL`**| 17 | 13 | 1 | 31 | 3 | `GIT` |
-| **TOTALES DEL SISTEMA** | **791** | — | **35** | **1511** | **101** | **35 Habilidades Canónicas Globales** |
+| **TOTALES DEL SISTEMA** | **791** | — | **35** (sin $\varepsilon$) | **1511** | **101** | **35 Habilidades Canónicas Globales** |
 
 ---
 
