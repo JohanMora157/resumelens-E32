@@ -1,0 +1,7 @@
+Maria Lopez
+Email: maria.lopez@example.com | Phone: +57-300-123-4567
+5 years of experience in software testing.
+Education:
+Bachelor's degree in Systems Engineering
+Technical Skills:
+Selenium, Pytest, Postman, Jira, Python, Git
