@@ -112,6 +112,7 @@ resumelens-E32/
 | [`docs/grammar-design.md`](docs/grammar-design.md) | Gramática libre de contexto y DSL (Etapa 4). |
 | [`docs/test-design.md`](docs/test-design.md) | Diseño de pruebas. |
 | [`docs/ai-usage.md`](docs/ai-usage.md) | Registro del uso de herramientas de IA. |
+| [`docs/presentation.pdf`](docs/presentation.pdf) ([resumen](docs/presentation.md)) | Diapositivas de la presentación del proyecto integrador. |
 | [`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md) | Guía de trabajo del equipo (plan inicial, con nota de estado final). |
 
 Los diagramas están en [`docs/diagrams/dfa/`](docs/diagrams/dfa/) (autómatas) y
