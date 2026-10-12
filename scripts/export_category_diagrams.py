@@ -17,7 +17,7 @@ from src.classification.profile_dfa import mandatory_categories
 
 OPTIONAL = {"FULL_STACK_DEVELOPER": ("API",), "DATA_ANALYST": ("SPREADSHEET",)}
 PALETTE = ["#2563eb", "#dc2626", "#16a34a", "#d97706", "#7c3aed", "#0891b2"]
-OUT = Path("docs/diagrams")
+OUT = Path("docs/diagrams/dfa")
 
 
 def build_dot(name: str) -> str:

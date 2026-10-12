@@ -1,7 +1,7 @@
 """Formalización (7-tupla) y diagramas de los FST, para docs/03_formalization.md.
 
 Uso:  python -m src.normalization.visualize
-Luego convertir:  dot -Tpng docs/diagrams/fst_frontend.dot -o docs/diagrams/fst_frontend.png
+Luego convertir:  dot -Tpng docs/diagrams/fst/fst_frontend.dot -o docs/diagrams/fst/fst_frontend.png
 """
 
 from pathlib import Path
@@ -44,6 +44,6 @@ def export_dot(fsts: Dict[str, FST], out_dir: Path) -> None:
 
 if __name__ == "__main__":
     fsts = load_fsts()
-    export_dot(fsts, Path("docs/diagrams"))
+    export_dot(fsts, Path("docs/diagrams/fst"))
     for fam, f in fsts.items():
         print(formal_definition(fam, f), "\n")

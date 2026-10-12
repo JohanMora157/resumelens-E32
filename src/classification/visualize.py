@@ -1,7 +1,7 @@
 """Formalización (5-tupla) y diagramas de los 4 DFA, para docs/03_formalization.md.
 
 Uso:  python -m src.classification.visualize
-Luego: dot -Tpng docs/diagrams/dfa_data_analyst.dot -o docs/diagrams/dfa_data_analyst.png
+Luego: dot -Tpng docs/diagrams/dfa/dfa_data_analyst.dot -o docs/diagrams/dfa/dfa_data_analyst.png
 """
 
 import sys
@@ -59,6 +59,6 @@ if __name__ == "__main__":
         except Exception:
             pass
     automata = build_all()
-    export_dot(automata, Path("docs/diagrams"))
+    export_dot(automata, Path("docs/diagrams/dfa"))
     for n, a in automata.items():
         print(formal_definition(n, a), "\n")
