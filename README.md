@@ -1,8 +1,7 @@
 # ResumeLens
 
 Sistema que analiza una hoja de vida en texto y determina si sus calificaciones explícitas cumplen
-el patrón formal de un perfil profesional. Proyecto integrador de **Ciencias de la Computación y
-Estructuras de Datos 3 (CyED3)**.
+el patrón formal de un perfil profesional. Proyecto integrador de **Computación y Estructuras Discretas III (CyED3)**.
 
 Perfiles evaluados: **Full Stack Developer**, **Machine Learning Engineer**, **QA Engineer** y
 **Data Analyst**.
@@ -84,6 +83,7 @@ resumelens-E32/
 │   ├── examples/             CVs de muestra
 │   └── resumes/              CVs de prueba
 ├── docs/                     Documentos de diseño (ver más abajo)
+├── scripts/                  Generador de diagramas de los autómatas
 ├── src/
 │   ├── extraction/           Etapa 1: expresiones regulares
 │   ├── normalization/        Etapa 2: transductores (FST), normalizador y ordenador
@@ -102,14 +102,21 @@ resumelens-E32/
 
 | Documento | Contenido |
 |---|---|
-| [`docs/architecture.md`](docs/architecture.md) | Arquitectura general del sistema. |
-| [`docs/regex-design.md`](docs/regex-design.md) | Diseño de las expresiones regulares. |
-| [`docs/fst-design.md`](docs/fst-design.md) | Diseño y formalización de los transductores. |
-| [`docs/dfa-design.md`](docs/dfa-design.md) | Formalización de los autómatas de clasificación. |
-| [`docs/data-analyst-dfa.md`](docs/data-analyst-dfa.md) | Autómata del perfil Data Analyst. |
-| [`docs/grammar-design.md`](docs/grammar-design.md) | Gramática libre de contexto y DSL. |
+| [`docs/architecture.md`](docs/architecture.md) | Arquitectura general y módulo de cada etapa. |
+| [`docs/profile-definitions.md`](docs/profile-definitions.md) | Los cuatro perfiles: categorías, patrón aceptado y justificación. |
+| [`docs/regex-design.md`](docs/regex-design.md) | Diseño de las expresiones regulares (Etapa 1). |
+| [`docs/fst-design.md`](docs/fst-design.md) | Diseño y formalización de los transductores (Etapa 2). |
+| [`docs/dfa-design.md`](docs/dfa-design.md) | Formalización de los cuatro autómatas (Etapa 3). |
+| [`docs/data-analyst.md`](docs/data-analyst.md) | Autómata de Data Analyst: tabla de transiciones y diagrama. |
+| [`docs/data-analyst-dfa.md`](docs/data-analyst-dfa.md) | Resumen en español del autómata de Data Analyst. |
+| [`docs/grammar-design.md`](docs/grammar-design.md) | Gramática libre de contexto y DSL (Etapa 4). |
 | [`docs/test-design.md`](docs/test-design.md) | Diseño de pruebas. |
 | [`docs/ai-usage.md`](docs/ai-usage.md) | Registro del uso de herramientas de IA. |
+| [`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md) | Guía de trabajo del equipo (plan inicial, con nota de estado final). |
+
+Los diagramas están en [`docs/diagrams/dfa/`](docs/diagrams/dfa/) (autómatas) y
+[`docs/diagrams/fst/`](docs/diagrams/fst/) (transductores); el script que genera los de los
+autómatas está en [`scripts/`](scripts/).
 
 ## Uso de inteligencia artificial
 
