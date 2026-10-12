@@ -145,21 +145,21 @@ Primero un ejemplo con 3 categorías (`LANGUAGE`, `DATABASE`, `VERSION_CONTROL`)
 muestra qué categorías ya se cubrieron. Los autómatas reales siguen exactamente el mismo esquema
 con `k` categorías y `2^k` estados.
 
-![Ejemplo con 3 categorías](diagrams/dfa_example_3_categories.png)
+![Ejemplo con 3 categorías](diagrams/dfa/dfa_example_3_categories.png)
 
 Data Analyst (4 categorías obligatorias, 16 estados). El color de cada flecha indica la categoría:
 
-![DFA Data Analyst por categorías](diagrams/dfa_data_analyst_categories.png)
+![DFA Data Analyst por categorías](diagrams/dfa/dfa_data_analyst_categories.png)
 
 Full Stack Developer (5 categorías obligatorias, 32 estados):
 
-![DFA Full Stack por categorías](diagrams/dfa_full_stack_developer_categories.png)
+![DFA Full Stack por categorías](diagrams/dfa/dfa_full_stack_developer_categories.png)
 
 Los diagramas de Machine Learning Engineer y QA Engineer (64 estados cada uno) están en
-`docs/diagrams/dfa_machine_learning_engineer_categories.png` y
-`docs/diagrams/dfa_qa_engineer_categories.png`; son legibles solo en pantalla completa.
+`docs/diagrams/dfa/dfa_machine_learning_engineer_categories.png` y
+`docs/diagrams/dfa/dfa_qa_engineer_categories.png`; son legibles solo en pantalla completa.
 
-**Vista completa.** Los archivos `docs/diagrams/dfa_*.dot` (generados con
+**Vista completa.** Los archivos `docs/diagrams/dfa/dfa_*.dot` (generados con
 `python -m src.classification.visualize`) contienen el autómata con todas sus transiciones. Sirven
 para inspección con Graphviz, no para leerse en una página. Para el autómata de Data Analyst, la
 tabla de transiciones y un diagrama completo en Mermaid están en [`data-analyst.md`](data-analyst.md).
